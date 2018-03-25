@@ -7,3 +7,9 @@ authors:
 crystal: 0.24.2
 
 license: MIT
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+  remarkdown:
+    github: huacnlee/remarkdown

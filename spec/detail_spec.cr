@@ -1,4 +1,4 @@
-ENV["TEST"] = "test"
+ENV["ENV"] = "test"
 
 require "./spec_helper"
 include Oversharing

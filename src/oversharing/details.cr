@@ -3,8 +3,6 @@ require "file_utils"
 require "uri"
 
 module Oversharing
-  DETAIL_LOCATION = ENV["TEST"] ? "spec/details" : "details"
-
   class Detail
     property endpoint : String
     getter views : (Int32 | Int64) = 0
@@ -47,7 +45,7 @@ module Oversharing
     getter sid : String = ShortId.generate_short_id
 
     def initialize(@endpoint : String)
-      @path_dir = "#{DETAIL_LOCATION}/#{@sid}/"
+      @path_dir = "#{base_dir}/#{@sid}/"
       @path_file = "data.yml"
       @path = "#{@path_dir}#{@path_file}"
       @endpoint_final_destination = "#{@path_dir}#{File.basename(@endpoint)}"
@@ -70,6 +68,10 @@ module Oversharing
       end
     end
 
+    def base_dir
+      Oversharing::Settings["details_dir"]
+    end
+
     def ensure_path
       FileUtils.mkdir_p(@path_dir) unless Dir.exists?(@path_dir)
     end
@@ -87,7 +89,7 @@ module Oversharing
     getter views : (Int32 | Int64) = 1
 
     def initialize(@sid : String)
-      @path = "#{DETAIL_LOCATION}/#{@sid}/data.yml"
+      @path = "#{base_dir}/#{@sid}/data.yml"
       raise "Detail #{@sid} not found at #{@path}" unless File.exists?(@path)
       @detail = DetailYaml.from_yaml(File.open(@path))
       @endpoint = @detail.endpoint
@@ -104,8 +106,20 @@ module Oversharing
       end
     end
 
+    def base_dir
+      Oversharing::Settings["details_dir"]
+    end
+
+    def url?
+      !File.exists? endpoint_path
+    end
+
+    def file?
+      File.exists? endpoint_path
+    end
+
     def endpoint_path
-      "#{DETAIL_LOCATION}/#{@detail.sid}/#{@endpoint}"
+      "#{base_dir}/#{@detail.sid}/#{@endpoint}"
     end
 
     def save_detail

@@ -1,0 +1,10 @@
+---
+development:
+  host: http://localhost
+  port: 3000
+  details_dir: details
+
+test:
+  host: http://localhost
+  port: 3000
+  details_dir: spec/details
