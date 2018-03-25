@@ -1,0 +1,38 @@
+= Overshare
+Matt Petty <matt@kizmeta.com>
+
+TODO: Write a description here
+
+== Installation
+
+Add this to your application's `shard.yml`:
+
+```yaml
+dependencies:
+  oversharing:
+    github: lodestone/overshare
+```
+
+== Usage
+
+```crystal
+require "overshare"
+```
+
+TODO: Write usage instructions here
+
+== Development
+
+TODO: Write development instructions here
+
+== Contributing
+
+. Fork it (https://github.com/lodestone/overshare/fork)
+. Create your feature branch (git checkout -b my-new-feature)
+. Commit your changes (git commit -am 'Add some feature')
+. Push to the branch (git push origin my-new-feature)
+. Create a new Pull Request
+
+== Contributors
+
+* link::https://github.com/lodestone[lodestone] Matt Petty - creator, maintainer
