@@ -3,8 +3,16 @@ development:
   host: http://localhost
   port: 3000
   details_dir: details
+  public_host: http://localhost:3000
 
 test:
   host: http://localhost
   port: 3000
   details_dir: spec/details
+  public_host: http://localhost:3000
+
+production:
+  host: http://localhost
+  post: 4567
+  details_dir: details
+  public_host: http://nx.is

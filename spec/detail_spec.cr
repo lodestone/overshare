@@ -1,7 +1,7 @@
 ENV["ENV"] = "test"
 
 require "./spec_helper"
-include Oversharing
+include Overshare
 
 def setup_details
   FileUtils.cp_r "spec/fixtures/nested", "spec/details/nested" unless Dir.exists?("spec/details/nested")
@@ -16,7 +16,7 @@ def remove_details
   `rm -rf spec/details/*`
 end
 
-describe Oversharing::Detail do
+describe Overshare::Detail do
   it "is generally okay" do
     Detail.new("spec/fixtures/fu.pdf").should_not be(nil)
   end

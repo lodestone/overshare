@@ -2,7 +2,7 @@ require "yaml"
 require "file_utils"
 require "uri"
 
-module Oversharing
+module Overshare
   class Detail
     property endpoint : String
     getter views : (Int32 | Int64) = 0
@@ -13,6 +13,10 @@ module Oversharing
 
     def sid
       @detail.sid
+    end
+
+    def uri
+      @detail.uri
     end
 
     def persist
@@ -68,8 +72,12 @@ module Oversharing
       end
     end
 
+    def uri
+      "#{Settings["public_host"]}/+#{sid}"
+    end
+
     def base_dir
-      Oversharing::Settings["details_dir"]
+      Overshare::Settings["details_dir"]
     end
 
     def ensure_path
@@ -107,7 +115,7 @@ module Oversharing
     end
 
     def base_dir
-      Oversharing::Settings["details_dir"]
+      Overshare::Settings["details_dir"]
     end
 
     def url?
@@ -120,6 +128,10 @@ module Oversharing
 
     def endpoint_path
       "#{base_dir}/#{@detail.sid}/#{@endpoint}"
+    end
+
+    def uri
+      "#{Settings["public_host"]}/+#{sid}"
     end
 
     def save_detail

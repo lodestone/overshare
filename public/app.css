@@ -1,0 +1,15 @@
+body, * {
+  font-family: "Montserrat";
+}
+code, pre, blockquote, quote {
+  font-family: Monaco, monospace;
+}
+html {
+  background: rgb(37, 39, 48);
+}
+body {
+  margin: 1vh;
+  border: 3px solid #fff;
+  background: #edf3ff;
+  padding: 2vh;
+}
