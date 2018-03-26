@@ -1,7 +1,9 @@
-ENV["ENV"] = "test"
 
+ENV["ENV"] = "test"
 require "./spec_helper"
+ENV["ENV"] = "test"
 include Overshare
+ENV["ENV"] = "test"
 
 def setup_details
   FileUtils.cp_r "spec/fixtures/nested", "spec/details/nested" unless Dir.exists?("spec/details/nested")

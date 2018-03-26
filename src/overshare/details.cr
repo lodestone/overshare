@@ -1,4 +1,5 @@
 require "yaml"
+require "remarkdown"
 require "file_utils"
 require "uri"
 
@@ -7,7 +8,7 @@ module Overshare
     property endpoint : String
     getter views : (Int32 | Int64) = 0
 
-    def initialize(@endpoint : String)
+    def initialize(@endpoint)
       @detail = RememberDetail.new(@endpoint)
     end
 
@@ -17,6 +18,10 @@ module Overshare
 
     def uri
       @detail.uri
+    end
+
+    def endpoint
+      @detail.endpoint
     end
 
     def persist
@@ -32,9 +37,18 @@ module Overshare
       new(endpoint).persist
     end
 
-    def self.get(sid)
+    def self.get(sid : String | Nil)
+      return NilDetail.new if sid.nil?
       RecallDetail.new(sid)
     end
+  end
+
+  class NilDetail
+    property endpoint : String | Nil
+    property views : Int64 | Nil
+    def redirect_to; end
+    def render_html; end
+    def retrieve; end
   end
 
   class DetailYaml
@@ -70,6 +84,11 @@ module Overshare
           yaml.scalar 1
         end
       end
+    end
+
+    def render_html
+      return Remarkdown.to_html File.read(endpoint_path) if endpoint_path =~ /\.md$/
+      return `asciidoctor -s -o - #{endpoint_path}` if endpoint_path =~ /\.adoc$/
     end
 
     def uri
@@ -112,6 +131,16 @@ module Overshare
       else
         @endpoint
       end
+    end
+
+    def render_html
+      return Remarkdown.to_html File.read(endpoint_path) if endpoint_path =~ /\.md$/
+      return `asciidoctor -s -o - #{endpoint_path}` if endpoint_path =~ /\.adoc$/
+    end
+
+    def redirect_to
+      return endpoint if url?
+      return "/=#{endpoint_path.gsub("details/","")}" if file?
     end
 
     def base_dir
