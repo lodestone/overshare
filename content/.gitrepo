@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:lodestone/overshare-content.git
+	branch = master
+	commit = 77d13c0d261d519a24ab798d8dd72341a73179b2
+	parent = 2ca5cc6e8de72f5fb578aba3d1b9c576ae45c45a
+	cmdver = 0.3.1
