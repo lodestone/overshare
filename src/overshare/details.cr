@@ -109,7 +109,6 @@ module Overshare
     end
   end
 
-
   class RecallDetail
     getter endpoint : String
     getter sid : String
