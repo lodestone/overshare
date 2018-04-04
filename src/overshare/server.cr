@@ -10,7 +10,7 @@ before_all do |env|
 end
 
 def four_oh_four_message
-  %Q[{"message": "It's so dark in here"}]
+  %Q[{"message": "Error 404: It's so dark in here"}]
 end
 
 def handle_uploaded_tmpfile(point)
@@ -60,6 +60,31 @@ get "/+*sid" do |env|
   end
 end
 
+get "/-/*sid" do |env|
+  begin
+    sid = env.params.url["sid"]?
+    if /.*data\.yml$/ =~ sid
+      halt env, status_code: 404, response: four_oh_four_message
+    end
+    if File.exists?("details/#{sid}") && !File.directory?("details/#{sid}")
+      send_file env, "details/#{sid}"
+    else
+      if detail = Overshare::Detail.get(sid)
+        if html = detail.render_html
+          layout = File.read("content/templates/layout.html")
+          layout.gsub("{{ CONTENT }}", html)
+        else
+          env.redirect detail.redirect_to || "/"
+        end
+      else
+        halt env, status_code: 404, response: four_oh_four_message
+      end
+    end
+  rescue
+    halt env, status_code: 404, response: four_oh_four_message
+  end
+end
+
 get "/=*sid" do |env|
   begin
     if sid = env.params.url["sid"]?
@@ -75,9 +100,12 @@ end
 
 get "/~*sid" do |env|
   if detail = Overshare::Detail.get(env.params.url["sid"]?)
-    html = detail.render_html
-    render "templates/html.ecr" if html
-    env.redirect detail.redirect_to || "/" if !html
+    if html = detail.render_html
+      layout = File.read("content/templates/layout.html")
+      layout.gsub("{{ CONTENT }}", html)
+    else
+      env.redirect detail.redirect_to || "/"
+    end
   else
     halt env, status_code: 404, response: four_oh_four_message
   end
