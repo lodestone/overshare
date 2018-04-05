@@ -88,6 +88,7 @@ module Overshare
 
     def render_html
       return Remarkdown.to_html File.read(endpoint_path) if endpoint_path =~ /\.md$/
+      # return `pandoc #{endpoint_path}` if endpoint_path =~ /\.md$/
       return `asciidoctor -s -o - #{endpoint_path}` if endpoint_path =~ /\.adoc$/
     end
 
