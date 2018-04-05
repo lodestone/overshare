@@ -7,6 +7,8 @@ require "./details"
 require "./settings"
 
 public_folder "content/public"
+Kemal.config.host_binding = Overshare::Settings["host"].as_s
+Kemal.config.port = Overshare::Settings["port"].as_i
 
 before_all do |env|
   env.response.content_type = "application/json"
