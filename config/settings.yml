@@ -5,6 +5,8 @@ development:
   details_dir: details
   public_host: http://localhost:3000
   symbol: "-"
+  username: auth
+  password: spacerobots1234
 
 test:
   host: http://localhost
@@ -12,6 +14,8 @@ test:
   details_dir: spec/details
   public_host: http://localhost:3000
   symbol: "-"
+  username: auth
+  password: spacerobots1234
 
 production:
   host: http://localhost
@@ -19,3 +23,5 @@ production:
   details_dir: details
   public_host: http://nx.is
   symbol: "-"
+  username: auth
+  password: spacerobots1234

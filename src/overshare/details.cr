@@ -92,7 +92,7 @@ module Overshare
     end
 
     def uri
-      "#{Settings["public_host"]}/+#{sid}"
+      "#{Settings["public_host"]}/#{Overshare::Settings["symbol"]}#{sid}"
     end
 
     def base_dir

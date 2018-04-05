@@ -35,7 +35,9 @@ def extract_point_from_params(env)
 end
 
 def authorized(username, password)
-  username == "auth" && password == "password86"
+  username_ok = Overshare::Settings["username"] == username
+  password_ok = Overshare::Settings["password"] == password
+  username_ok && password_ok
 end
 
 def check_authorization(env)
@@ -50,7 +52,7 @@ def reject_request(env)
   env.response.close
 end
 
-post "/+" do |env|
+post "/#{Overshare::Settings["symbol"]}" do |env|
   check_authorization(env)
   if point = extract_point_from_params(env)
     detail = Overshare::Detail.make(point)
@@ -60,43 +62,44 @@ post "/+" do |env|
   end
 end
 
-# get "/+*sid" do |env|
-#   begin
-#     detail = Overshare::Detail.get(env.params.url["sid"]?)
-#     env.redirect detail.redirect_to || "/" if detail
-#   rescue error
-#     log "ERROR: #{error}"
-#     halt env, status_code: 404, response: four_oh_four_message
-#   end
-# end
-
 get "/#{Overshare::Settings["symbol"]}/*sid" do |env|
   begin
-    sid = env.params.url["sid"]?
-    if /.*data\.yml$/ =~ sid
-      halt env, status_code: 404, response: four_oh_four_message
-    end
-    if File.exists?("#{Overshare::Settings["details_dir"]}/#{sid}") && !File.directory?("#{Overshare::Settings["details_dir"]}/#{sid}")
-      ext = File.extname("#{sid}")
-      mime_type = Mime.from_ext(ext)
-      send_file env, "#{Overshare::Settings["details_dir"]}/#{sid}", mime_type
-    else
-      if detail = Overshare::Detail.get(sid)
-        env.response.content_type = "text/html"
-        if html = detail.render_html
-          layout = File.read("content/templates/layout.html")
-          string = layout.gsub("{{ CONTENT }}", html)
-          string
-        else
-          env.redirect detail.redirect_to || "/"
-        end
-      else
-        halt env, status_code: 404, response: four_oh_four_message
-      end
-    end
-  rescue exception
-    p exception
+    go_detail(env)
+  rescue
     halt env, status_code: 404, response: four_oh_four_message
+  end
+end
+
+get "/#{Overshare::Settings["symbol"]}*sid" do |env|
+  begin
+    go_detail(env)
+  rescue
+    halt env, status_code: 404, response: four_oh_four_message
+  end
+end
+
+def go_detail(env)
+  sid = env.params.url["sid"]?
+  if /.*data\.yml$/ =~ sid
+    raise "REJECTED"
+  end
+  if File.exists?("#{Overshare::Settings["details_dir"]}/#{sid}") && !File.directory?("#{Overshare::Settings["details_dir"]}/#{sid}")
+    ext = File.extname("#{sid}")
+    mime_type = Mime.from_ext(ext)
+    send_file env, "#{Overshare::Settings["details_dir"]}/#{sid}", mime_type
+  else
+    if detail = Overshare::Detail.get(sid)
+      env.response.content_type = "text/html"
+      if html = detail.render_html
+        layout = File.read("content/templates/layout.html")
+        string = layout.gsub("{{ CONTENT }}", html)
+        string
+      else
+        env.redirect detail.redirect_to || "/"
+      end
+    else
+      raise "HELL"
+    end
   end
 end
 
