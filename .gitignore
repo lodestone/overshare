@@ -4,6 +4,9 @@
 /.shards/
 details
 config/settings.yml
+overshare
+overshare.o
+overshare.dwarf
 
 # Libraries don't need dependency lock
 # Dependencies will be locked in application that uses them
