@@ -5,15 +5,27 @@ image:resources/overshare.png[Overshare, width=200,float=right]
 
 _Overshare is **ALPHA** software. It is fragile and needs love to grow._
 
-_Overshare is a crystal app that works a bit like Droplr. You send Overshare a file or url and you get back a shortened link. This is designed to be run on your own server to ensure files and urls you share are private. Overshare will also automatically convert markdown and Asciidoc into html. Overshare is written in Crystal, so it's pretty fast._
+_Overshare is a crystal web app that works a bit like Droplr/CloudApp. You send Overshare a file or url and you get back a shortened link. This is designed to be run on your OWN server for your privacy. Overshare will also automatically convert markdown and asciidoc into html. Also, Overshare is written in Crystal, so it's pretty fast (benchmarks soon)._
 
 == Design Goals
 
-* Shorten URLs
+* Save and Shorten URLs
 * Quick one-off file sharing
 * Turn shared markdown/asciidoc into html
 * Allow viewing/downloading markdown/asciidoc source
+* Landing pages for shared files #TODO
 
+== About Overshare
+
+* It does NOT use a database. It uses the _filesystem_ as it primarily deals with _FILES_.
+* Overshare is hosted by YOU.
+* It is up to you to purge old files. This may change.
+* Your files will be stored in the "details_dir" directory you set in `config/settings.yml`
+* Files saved by POSTing to the app live in a subdirectory by short id like this:
+** `details/SHORTID/File.ext`
+** `details/SHORTID/data.yml`
+* URLs are mapped like: `http://your-host/-SHORTID`
+* You can make arbitrary folders in your details directory. They do NOT have to have a `data.yml` to be served. So if you make `details/blog/2018-04-05-My-Adventure.html` then you can find it at `http://your-host/-blog/2018-04-05-My-Adventure.html`
 
 == Setup
 
@@ -22,38 +34,25 @@ _Overshare is a crystal app that works a bit like Droplr. You send Overshare a f
 * Build the binary `crystal build --release src/overshare.cr`
 * Run the server `./overshare server`
 
-
 == Usage/Examples:
 
 === Save a url:
 
 ```bash
-curl -F "endpoint=http://news.ycombinator.com" "http://user:pass@host/-"
-{"message":"Created","url":"http://host/-byczr0"}
+curl -F "endpoint=http://news.ycombinator.com" "http://user:pass@your-host/-"
+{"message":"Created","url":"http://your-host/-byczr0"}
 ```
 
 === Save a file:
 
 ```bash
-curl -F "endpoint=@path/to/file.md" "http://user:pass@host/-"
-{"message":"Created","url":"http://host/-ab723i"}
+curl -F "endpoint=@path/to/file.md" "http://user:pass@your-host/-"
+{"message":"Created","url":"http://your-host/-ab723i"}
 ```
 
 == Alfred Workflow
 
 There is an link:resources/overshare-workflow.alfredworkflow[Alfred Workflow] for sharing from macOS easily. I set `⌥+o` to share with my Overshare instance.
-
-
-== About Overshare
-
-* It does NOT use a database. It uses the _filesystem_ as it primarily deals with _FILES_.
-* Overshare is hosted by YOU.
-* Right now it is up to you to purge old files.
-
-== Installation:
-
-TODO:: WRITE THIS
-
 == Helping
 
 . Fork it (https://github.com/lodestone/overshare/fork)
