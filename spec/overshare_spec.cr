@@ -37,9 +37,10 @@ describe Overshare do
   end
 
   it "returns the requested fil, unmodified when parsing is not needed" do
+    setup_details
     Kemal.run do
       get "/-/nodata/i-have-no-data-file.html"
-      response.body.should match /.*\<h1.*\>I am Nested Twice\<\/h1\>.*/
+      response.body.should eq "<html>\n<h1>No data.yml</h1>\n</html>\n"
     end
   end
 end

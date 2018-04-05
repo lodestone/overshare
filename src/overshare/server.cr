@@ -5,15 +5,6 @@ require "kemal-basic-auth"
 require "mime"
 require "./details"
 require "./settings"
-#
-# module Raw
-#   macro embed(filename, io)
-#     # {{ io.id }} << {{`cat #{filename}`.stringify}}
-#     filename
-#   end
-# end
-#
-# Kilt.register_engine("", Raw.embed)
 
 before_all do |env|
   env.response.content_type = "application/json"
@@ -81,7 +72,7 @@ end
 def go_detail(env)
   sid = env.params.url["sid"]?
   if /.*data\.yml$/ =~ sid
-    raise "REJECTED"
+    raise "Auth Failed"
   end
   if File.exists?("#{Overshare::Settings["details_dir"]}/#{sid}") && !File.directory?("#{Overshare::Settings["details_dir"]}/#{sid}")
     ext = File.extname("#{sid}")
@@ -98,33 +89,7 @@ def go_detail(env)
         env.redirect detail.redirect_to || "/"
       end
     else
-      raise "HELL"
+      raise "Not Found"
     end
   end
 end
-
-# get "/=*sid" do |env|
-#   begin
-#     if sid = env.params.url["sid"]?
-#       send_file env, "details/#{sid}"
-#     else
-#       halt env, status_code: 404, response: four_oh_four_message
-#     end
-#   rescue error
-#     log "ERROR: #{error}"
-#     halt env, status_code: 404, response: four_oh_four_message
-#   end
-# end
-
-# get "/~*sid" do |env|
-#   if detail = Overshare::Detail.get(env.params.url["sid"]?)
-#     if html = detail.render_html
-#       layout = File.read("content/templates/layout.html")
-#       layout.gsub("{{ CONTENT }}", html)
-#     else
-#       env.redirect detail.redirect_to || "/"
-#     end
-#   else
-#     halt env, status_code: 404, response: four_oh_four_message
-#   end
-# end
