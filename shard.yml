@@ -13,6 +13,9 @@ dependencies:
     github: kemalcr/kemal
   kemal-session:
     github: kemalcr/kemal-session
+  spec-kemal:
+    github: kemalcr/spec-kemal
+    branch: master
   kemal-basic-auth:
     github: kemalcr/kemal-basic-auth
   remarkdown:

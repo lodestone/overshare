@@ -115,13 +115,26 @@ module Overshare
     getter views : (Int32 | Int64) = 1
 
     def initialize(@sid : String)
+      raise "Access data file ***REJECTED***" if @sid =~ /data\.yml/
       @path = "#{base_dir}/#{@sid}/data.yml"
-      raise "Detail #{@sid} not found at #{@path}" unless File.exists?(@path)
-      @detail = DetailYaml.from_yaml(File.open(@path))
-      @endpoint = @detail.endpoint
-      @detail.views = @detail.views + 1
-      @views = @detail.views
-      save_detail
+      # Are we asking for a directory or an exact file?
+      if File.exists?("#{base_dir}/#{@sid}") && !File.directory?("#{base_dir}/#{@sid}")
+        p name =  "#{base_dir}/#{File.dirname(@sid)}/data.yml"
+        p @sid = File.dirname(@sid)
+        # name = File.basename("#{base_dir}/#{@sid}")
+        @detail = DetailYaml.from_yaml(File.open(name))
+        @endpoint = @detail.endpoint
+        @detail.views = @detail.views + 1
+        @views = @detail.views
+        save_detail
+      else
+        raise "Detail #{@sid} not found at #{@path}" unless File.exists?(@path)
+        @detail = DetailYaml.from_yaml(File.open(@path))
+        @endpoint = @detail.endpoint
+        @detail.views = @detail.views + 1
+        @views = @detail.views
+        save_detail
+      end
     end
 
     def retrieve
@@ -162,8 +175,12 @@ module Overshare
       "#{Settings["public_host"]}/+#{sid}"
     end
 
+    def data_path
+      "#{base_dir}/#{@sid}/data.yml"
+    end
+
     def save_detail
-      File.open(@path, "w+"){|file| file << YAML.dump(@detail) }
+      File.open(data_path, "w+"){|file| file << YAML.dump(@detail) }
     end
   end
 

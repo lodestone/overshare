@@ -66,8 +66,8 @@ get "/-/*sid" do |env|
     if /.*data\.yml$/ =~ sid
       halt env, status_code: 404, response: four_oh_four_message
     end
-    if File.exists?("details/#{sid}") && !File.directory?("details/#{sid}")
-      send_file env, "details/#{sid}"
+    if File.exists?("#{Overshare::Settings["details_dir"]}/#{sid}") && !File.directory?("#{Overshare::Settings["details_dir"]}/#{sid}")
+      send_file env, "#{Overshare::Settings["details_dir"]}/#{sid}"
     else
       if detail = Overshare::Detail.get(sid)
         if html = detail.render_html
@@ -80,7 +80,8 @@ get "/-/*sid" do |env|
         halt env, status_code: 404, response: four_oh_four_message
       end
     end
-  rescue
+  rescue exception
+    p exception
     halt env, status_code: 404, response: four_oh_four_message
   end
 end

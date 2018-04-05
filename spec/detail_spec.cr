@@ -1,14 +1,6 @@
 
-ENV["ENV"] = "test"
 require "./spec_helper"
-ENV["ENV"] = "test"
 include Overshare
-ENV["ENV"] = "test"
-
-def setup_details
-  FileUtils.cp_r "spec/fixtures/nested", "spec/details/nested" unless Dir.exists?("spec/details/nested")
-  FileUtils.cp_r "spec/fixtures/xyz987", "spec/details/xyz987" unless Dir.exists?("spec/details/xyz987")
-end
 
 def url
   "https://spacerobots.net"
@@ -116,7 +108,6 @@ describe Overshare::Detail do
   # Cleanup and Teardown
   # TODO: Fix this!
   Spec.after_each do
-    puts "This isn't running"
     remove_details
   end
 end
