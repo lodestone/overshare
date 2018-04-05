@@ -2,6 +2,14 @@ require "./spec_helper"
 require "spec-kemal"
 
 describe Overshare do
+  it "redirects the root path to the proper location" do
+    Kemal.run do
+      get "/"
+      response.status_code.should eq 302
+      response.headers["Location"].should eq Overshare::Settings["root_to"].as_s
+    end
+  end
+
   it "returns the requested file, unmodified" do
     setup_details
     Kemal.run do

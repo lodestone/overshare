@@ -57,6 +57,10 @@ post "/#{Overshare::Settings["symbol"]}" do |env|
   end
 end
 
+get "/" do |env|
+  env.redirect Overshare::Settings["root_to"].as_s
+end
+
 get "/#{Overshare::Settings["symbol"]}/*sid" do |env|
   begin
     go_detail(env)
@@ -81,12 +85,14 @@ def go_detail(env)
   end
   # Requesting a literal file
   if File.exists?("#{Overshare::Settings["details_dir"]}/#{sid}") && !File.directory?("#{Overshare::Settings["details_dir"]}/#{sid}")
+    log "#{Time.now} Serving:::: #{Overshare::Settings["details_dir"]}/#{sid} FROM //#{env.request.host_with_port}#{env.request.path}"
     ext = File.extname("#{sid}").gsub(".", "")
     mime_type = Mime.from_ext(ext)
     env.response.content_type = mime_type.to_s
     send_file env, "#{Overshare::Settings["details_dir"]}/#{sid}", mime_type
   else # Requesting a url or something we need to parse
     if detail = Overshare::Detail.get(sid)
+      log "#{Time.now} Rendering:::: #{Overshare::Settings["details_dir"]}/#{sid} FROM //#{env.request.host_with_port}#{env.request.path}"
       env.response.content_type = "text/html"
       if html = detail.render_html
         layout = File.read("content/templates/layout.html")
