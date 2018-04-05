@@ -117,11 +117,11 @@ module Overshare
     def initialize(@sid : String)
       raise "Access data file ***REJECTED***" if @sid =~ /data\.yml/
       @path = "#{base_dir}/#{@sid}/data.yml"
+
       # Are we asking for a directory or an exact file?
       if File.exists?("#{base_dir}/#{@sid}") && !File.directory?("#{base_dir}/#{@sid}")
-        p name =  "#{base_dir}/#{File.dirname(@sid)}/data.yml"
-        p @sid = File.dirname(@sid)
-        # name = File.basename("#{base_dir}/#{@sid}")
+        name =  "#{base_dir}/#{File.dirname(@sid)}/data.yml"
+        @sid = File.dirname(@sid)
         @detail = DetailYaml.from_yaml(File.open(name))
         @endpoint = @detail.endpoint
         @detail.views = @detail.views + 1
@@ -152,7 +152,7 @@ module Overshare
 
     def redirect_to
       return endpoint if url?
-      return "/=#{endpoint_path.gsub("details/","")}" if file?
+      return "/#{Overshare::Settings["symbol"]}/#{@sid}/#{@endpoint}" if file?
     end
 
     def base_dir
@@ -172,7 +172,7 @@ module Overshare
     end
 
     def uri
-      "#{Settings["public_host"]}/+#{sid}"
+      "#{Settings["public_host"]}/#{Settings["symbol"]}#{sid}"
     end
 
     def data_path
