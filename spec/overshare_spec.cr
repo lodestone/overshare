@@ -2,7 +2,6 @@ require "./spec_helper"
 require "spec-kemal"
 
 describe Overshare do
-  # You can use get,post,put,patch,delete to call the corresponding route.
   it "returns the requested file, unmodified" do
     setup_details
     Kemal.run do
@@ -19,7 +18,7 @@ describe Overshare do
     end
   end
 
-  it "returns the requested fil, unmodified when parsing is not needed" do
+  it "returns the requested file, unmodified when parsing is not needed" do
     setup_details
     Kemal.run do
       get "/-/abc123"
@@ -36,7 +35,7 @@ describe Overshare do
     response.headers["Location"].should eq url
   end
 
-  it "returns the requested fil, unmodified when parsing is not needed" do
+  it "returns the requested file, unmodified when parsing is not needed" do
     setup_details
     Kemal.run do
       get "/-/nodata/i-have-no-data-file.html"
