@@ -53,6 +53,7 @@ curl -F "endpoint=@path/to/file.md" "http://user:pass@your-host/-"
 == Alfred Workflow
 
 There is an link:resources/overshare-workflow.alfredworkflow[Alfred Workflow] for sharing from macOS easily. I set `⌥+o` to share with my Overshare instance.
+
 == Helping
 
 . Fork it (https://github.com/lodestone/overshare/fork)
