@@ -14,27 +14,48 @@ _Overshare is a crystal web app that works a bit like Droplr/CloudApp. You send 
 * Turn shared markdown/asciidoc into html
 * Allow viewing/downloading markdown/asciidoc source
 * Landing pages for shared files #TODO
+* Act like Github gist service and show pretty code files #TODO
 
 == About Overshare
 
-* It does NOT use a database. It uses the _filesystem_ as it primarily deals with _FILES_.
-* Overshare is hosted by YOU.
-* It is up to you to purge old files. This may change.
-* Your files will be stored in the "details_dir" directory you set in `config/settings.yml`
+* **NOTE**: Overshare does NOT use a database. It uses the _filesystem_ as it primarily deals with _FILES_.
+* **NOTE**: Overshare is hosted by YOU.
+* **NOTE**: It is up to you to purge old files. This may change.
+
+== Internal/Details
+
+* Your files and data will be stored in the `details_dir` (see `config/settings.yml`)
 * Files saved by POSTing to the app live in a subdirectory by short id like this:
-** `details/SHORTID/File.ext`
-** `details/SHORTID/data.yml`
+** `details/<SHORTID>/File.ext`
+** `details/<SHORTID>/data.yml`
 * URLs are mapped like: `http://your-host/-SHORTID`
 * You can make arbitrary folders in your details directory. They do NOT have to have a `data.yml` to be served. So if you make `details/blog/2018-04-05-My-Adventure.html` then you can find it at `http://your-host/-blog/2018-04-05-My-Adventure.html`
 
 == Setup
 
-* Clone the repo
-* Edit `config/settings.yml`
-* Build the binary `crystal build --release src/overshare.cr`
+* `git clone https://github.com/lodestone/overshare.git`
+* `cd overshare`
+* `cp config/settings.example.yml config/settings.yml`
+* `shards install` to install dependencies
+* `crystal src/overshare.cr -- server` to run the server
+* `KEMAL_ENV=test crystal spec` to run specs
+
+== Building the Binary:
+
+* Build the binary `crystal build --release --no-debug src/overshare.cr`
 * Run the server `./overshare server`
 
-== Usage/Examples:
+== Deployment
+
+I recommend you use a service like DigitalOcean (link:https://m.do.co/c/4dcb386b6fd0[Referral Link]) to run a small personal server.
+
+```txt
+TODO: Fill out this section.
+```
+
+== Curl Examples:
+
+Here are some curl examples for reference, but I recommend you use the Alfred Workflow or shell script instead.
 
 === Save a url:
 
@@ -50,9 +71,13 @@ curl -F "endpoint=@path/to/file.md" "http://user:pass@your-host/-"
 {"message":"Created","url":"http://your-host/-ab723i"}
 ```
 
-== Alfred Workflow
+== Resources
 
-There is an link:resources/overshare-workflow.alfredworkflow[Alfred Workflow] for sharing from macOS easily. I set `⌥+o` to share with my Overshare instance.
+Alfred Workflow::
+  link:resources/overshare-workflow.alfredworkflow[Alfred Workflow] for easy macOS oversharing (I set `⌥+o` to share with my Overshare instance)
+Shell Script::
+  Usage: `oshare [filepath||url]` link:resources/oshare[resources/oshare]
+
 
 == Helping
 
