@@ -36,4 +36,4 @@ TODO:: WRITE THIS
 
 == Contributors
 
-* link::https://github.com/lodestone[lodestone] Matt Petty - creator, maintainer
+* @lodestone Matt Petty - creator, maintainer
