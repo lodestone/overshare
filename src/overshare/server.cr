@@ -6,6 +6,8 @@ require "mime"
 require "./details"
 require "./settings"
 
+public_folder "content/public"
+
 before_all do |env|
   env.response.content_type = "application/json"
 end
