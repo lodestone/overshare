@@ -1,29 +1,30 @@
 = Overshare
 Matt Petty <matt@kizmeta.com>
 
-TODO: Write a description here
+_**Work In Progress**_
 
-== Installation
+_Overshare is a crystal app that works a bit like Droplr. You send Overshare a file or url and you get back a shortened link. This is designed to be run on your own server to ensure files and urls you share are private. Overshare will also automatically convert markdown and Asciidoc into html. Overshare is written in Crystal, so it's pretty fast._
 
-Add this to your application's `shard.yml`:
+== Examples:
 
-```yaml
-dependencies:
-  oversharing:
-    github: lodestone/overshare
+=== Save a url:
+
+```bash
+curl -F "endpoint=http://news.ycombinator.com" "http://user:pass@host/-"
+{"message":"Created","url":"http://host/-byczr0"}
 ```
 
-== Usage
+=== Save a file:
 
-```crystal
-require "overshare"
+```bash
+curl -F "endpoint=@path/to/file.md" "http://user:pass@host/-"
+{"message":"Created","url":"http://host/-ab723i"}
 ```
 
-TODO: Write usage instructions here
 
-== Development
+== Installation:
 
-TODO: Write development instructions here
+TODO:: WRITE THIS
 
 == Contributing
 
