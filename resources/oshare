@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+require "json"
+
+host     = ENV["OVERSHARE_HOST"]
+username = ENV["OVERSHARE_USERNAME"]
+password = ENV["OVERSHARE_PASSWORD"]
+
+begin
+  modifier = ""
+  modifier = "@" if File.exist? ARGV.first
+  puts JSON.parse(`curl -s -F "endpoint=#{modifier}#{ARGV.first}" "http://#{username}:#{password}@#{host}"`)["url"]
+rescue => ex
+  p ex
+end
