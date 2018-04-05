@@ -1,7 +1,7 @@
 = Overshare
 Matt Petty <matt@kizmeta.com>
 
-_**Work In Progress**_
+image:resources/overshare.png[Overshare, width=200,float=right]
 
 _Overshare is a crystal app that works a bit like Droplr. You send Overshare a file or url and you get back a shortened link. This is designed to be run on your own server to ensure files and urls you share are private. Overshare will also automatically convert markdown and Asciidoc into html. Overshare is written in Crystal, so it's pretty fast._
 
@@ -21,6 +21,10 @@ curl -F "endpoint=@path/to/file.md" "http://user:pass@host/-"
 {"message":"Created","url":"http://host/-ab723i"}
 ```
 
+== About Overshare
+
+* It does NOT use a database. It uses the _filesystem_ as it primarily deals with _FILES_.
+* Overshare is hosted by YOU
 
 == Installation:
 
