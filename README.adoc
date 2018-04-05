@@ -3,9 +3,27 @@ Matt Petty <matt@kizmeta.com>
 
 image:resources/overshare.png[Overshare, width=200,float=right]
 
+_Overshare is **ALPHA** software. It is fragile and needs love to grow._
+
 _Overshare is a crystal app that works a bit like Droplr. You send Overshare a file or url and you get back a shortened link. This is designed to be run on your own server to ensure files and urls you share are private. Overshare will also automatically convert markdown and Asciidoc into html. Overshare is written in Crystal, so it's pretty fast._
 
-== Examples:
+== Design Goals
+
+* Shorten URLs
+* Quick one-off file sharing
+* Turn shared markdown/asciidoc into html
+* Allow viewing/downloading markdown/asciidoc source
+
+
+== Setup
+
+* Clone the repo
+* Edit `config/settings.yml`
+* Build the binary `crystal build --release src/overshare.cr`
+* Run the server `./overshare server`
+
+
+== Usage/Examples:
 
 === Save a url:
 
@@ -21,16 +39,22 @@ curl -F "endpoint=@path/to/file.md" "http://user:pass@host/-"
 {"message":"Created","url":"http://host/-ab723i"}
 ```
 
+== Alfred Workflow
+
+There is an link:resources/overshare-workflow.alfredworkflow[Alfred Workflow] for sharing from macOS easily. I set `⌥+o` to share with my Overshare instance.
+
+
 == About Overshare
 
 * It does NOT use a database. It uses the _filesystem_ as it primarily deals with _FILES_.
-* Overshare is hosted by YOU
+* Overshare is hosted by YOU.
+* Right now it is up to you to purge old files.
 
 == Installation:
 
 TODO:: WRITE THIS
 
-== Contributing
+== Helping
 
 . Fork it (https://github.com/lodestone/overshare/fork)
 . Create your feature branch (git checkout -b my-new-feature)
@@ -40,4 +64,4 @@ TODO:: WRITE THIS
 
 == Contributors
 
-* @lodestone Matt Petty - creator, maintainer
+* link:https://github.com/lodestone[@lodestone] Matt Petty - creator, maintainer
