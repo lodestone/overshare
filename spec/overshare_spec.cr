@@ -42,4 +42,36 @@ describe Overshare do
       response.body.should eq "<html>\n<h1>No data.yml</h1>\n</html>\n"
     end
   end
+
+  it "sets the proper mime type for jpeg files" do
+    setup_details
+    Kemal.run do
+      get "/-nodata/image.jpg"
+      response.headers["Content-Type"].should eq("image/jpeg")
+    end
+  end
+
+  it "sets the proper mime type for html files" do
+    setup_details
+    Kemal.run do
+      get "/-nodata/i-have-no-data-file.html"
+      response.headers["Content-Type"].should eq("text/html")
+    end
+  end
+
+  it "sets the proper mime type for raw markdown files" do
+    setup_details
+    Kemal.run do
+      get "/-xyz987/blog.md"
+      response.headers["Content-Type"].should eq("text/x-markdown")
+    end
+  end
+
+  it "sets the proper mime type for rendered markdown files" do
+    setup_details
+    Kemal.run do
+      get "/-xyz987"
+      response.headers["Content-Type"].should eq("text/html")
+    end
+  end
 end

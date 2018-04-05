@@ -68,7 +68,8 @@ end
 get "/#{Overshare::Settings["symbol"]}*sid" do |env|
   begin
     go_detail(env)
-  rescue
+  rescue ex
+    log ex.to_s
     halt env, status_code: 404, response: four_oh_four_message
   end
 end
@@ -78,11 +79,13 @@ def go_detail(env)
   if /.*data\.yml$/ =~ sid
     raise "Auth Failed"
   end
+  # Requesting a literal file
   if File.exists?("#{Overshare::Settings["details_dir"]}/#{sid}") && !File.directory?("#{Overshare::Settings["details_dir"]}/#{sid}")
-    ext = File.extname("#{sid}")
+    ext = File.extname("#{sid}").gsub(".", "")
     mime_type = Mime.from_ext(ext)
+    env.response.content_type = mime_type.to_s
     send_file env, "#{Overshare::Settings["details_dir"]}/#{sid}", mime_type
-  else
+  else # Requesting a url or something we need to parse
     if detail = Overshare::Detail.get(sid)
       env.response.content_type = "text/html"
       if html = detail.render_html
