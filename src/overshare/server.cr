@@ -31,7 +31,7 @@ class IndexHandler < Kemal::Handler
       return
     end
 
-    public_dir = "content/public"
+    public_dir = Overshare::Settings["static_dir"].as_s
     path = File.join(public_dir, context.request.path)
 
     # No file match under the public directory, carry on...

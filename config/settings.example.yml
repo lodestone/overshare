@@ -3,6 +3,7 @@ development:
   host: 127.0.0.1
   port: 3000
   details_dir: details
+  static_dir: content/public
   public_host: http://localhost:3000
   symbol: "-"
   username: auth
@@ -13,6 +14,7 @@ test:
   host: 127.0.0.1
   port: 3000
   details_dir: spec/details
+  static_dir: content/public
   public_host: http://localhost:3000
   symbol: "-"
   username: auth
@@ -23,6 +25,7 @@ production:
   host: 127.0.0.1
   port: 4567
   details_dir: details
+  static_dir: content/public
   public_host: http://nx.is
   symbol: "-"
   username: auth
