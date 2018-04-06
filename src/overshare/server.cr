@@ -6,13 +6,73 @@ require "mime"
 require "./details"
 require "./settings"
 
+module ETagGuardian
+  def etag_guard(context : HTTP::Server::Context, file_path : String)
+    etag = %{W/"#{File.lstat(file_path).mtime.epoch.to_s}"}
+    context.response.headers["ETag"] = etag
+    etag_match = context.request.headers["If-None-Match"]? && context.request.headers["If-None-Match"] == etag
+    if etag_match
+      context.response.headers.delete "Content-Type"
+      context.response.content_length = 0
+      context.response.status_code = 304 # not modified
+      context.response.close
+    end
+    return etag_match
+  end
+end
+
+
+class IndexHandler < Kemal::Handler
+  include ETagGuardian
+
+  def call(context)
+    if context.request.path.includes? '\0'
+      context.response.status_code = 400
+      return
+    end
+
+    public_dir = "content/public"
+    path = File.join(public_dir, context.request.path)
+
+    # No file match under the public directory, carry on...
+    return call_next(context) if !File.exists?(path)
+
+    # Check our etag, return if match is found
+    return if etag_guard(context, path)
+
+    # Now we know the public (not a directory) file exists, conditionally send file to client...
+    return send_file(context, path) if !File.directory?(path)
+
+    # Now we know a public directory exists, send the index.html if available...
+    return send_file(context, File.join(path, "index.html")) if File.exists?(File.join(path, "index.html"))
+
+    # Otherwise, carry on...
+    call_next context
+  end
+end
+add_handler IndexHandler.new
+
+error 404 do
+  "TODO: Make a 404 page."
+end
+
+error 500 do
+  "TODO: Make a 500 page"
+end
+
+
+include ETagGuardian
+
 public_folder "content/public"
+serve_static false
+
 Kemal.config.host_binding = Overshare::Settings["host"].as_s
 Kemal.config.port = Overshare::Settings["port"].as_i
 
 before_all do |env|
   env.response.content_type = "application/json"
 end
+
 
 def four_oh_four_message
   %Q[{"message": "Error 404: It's so dark in here"}]
@@ -87,9 +147,11 @@ def go_detail(env)
   if File.exists?("#{Overshare::Settings["details_dir"]}/#{sid}") && !File.directory?("#{Overshare::Settings["details_dir"]}/#{sid}")
     log "#{Time.now} Serving:::: #{Overshare::Settings["details_dir"]}/#{sid} FROM //#{env.request.host_with_port}#{env.request.path}"
     ext = File.extname("#{sid}").gsub(".", "")
+    path = "#{Overshare::Settings["details_dir"]}/#{sid}"
     mime_type = Mime.from_ext(ext)
     env.response.content_type = mime_type.to_s
-    send_file env, "#{Overshare::Settings["details_dir"]}/#{sid}", mime_type
+    return if etag_guard(env, path)
+    return send_file env, path, mime_type
   else # Requesting a url or something we need to parse
     if detail = Overshare::Detail.get(sid)
       log "#{Time.now} Rendering:::: #{Overshare::Settings["details_dir"]}/#{sid} FROM //#{env.request.host_with_port}#{env.request.path}"
@@ -97,7 +159,7 @@ def go_detail(env)
       if html = detail.render_html
         layout = File.read("content/templates/layout.html")
         string = layout.gsub("{{ CONTENT }}", html)
-        string
+        return string
       else
         env.redirect detail.redirect_to || "/"
       end
