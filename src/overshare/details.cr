@@ -69,11 +69,14 @@ module Overshare
       @endpoint_final_destination = "#{@path_dir}#{File.basename(@endpoint)}"
       ensure_path
       uri = URI.parse(@endpoint)
+
+      # TODO: Handle code snippets here
       if uri.scheme == nil || uri.scheme == "file"
         raise "File not found" if !File.exists?(@endpoint)
         FileUtils.cp @endpoint, @endpoint_final_destination
         @endpoint = File.basename(@endpoint)
       end
+
       @detail = YAML.build do |yaml|
         yaml.mapping do
           yaml.scalar "endpoint"

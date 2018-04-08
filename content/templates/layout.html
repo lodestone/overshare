@@ -1,19 +1,69 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Overshare</title>
-    <link href="//fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-    <script defer src="/fa.js"></script>
-    <script src="/app.js"></script>
-    <link href="/app.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js"></script>
+    <link rel="stylesheet" href="/stylesheets/monokai-sublime.css">
+    <script src="/javascripts/highlight.js"></script>
+    <title>Overshare:::</title>
+    <script src="/javascripts/app.js"></script>
+    <link href="/stylesheets/app.css" rel="stylesheet">
   </head>
   <body>
-  <section class="section">
-    <div class="container">
-      {{ CONTENT }}
+    <div id="kzm">
+      <a href="/"><img src="/images/kzm.png" /></a>
     </div>
-  </section>
+
+    <div id="corner-icon">
+      <a href="#">
+        <i class="fa-meh fas"></i>
+      </a>
+      <a href="#">
+        <i class="fa-bolt fas"></i>
+      </a>
+    </div>
+
+    <div class="container" style="margin: 0;">
+      <section class="hero is-primary background-hero">
+        <div class="hero-body">
+          <div class="container" style="margin: 0; max-width: 3000px; width: auto;">
+            <!-- <img src="/images/carpet.jpg" class="header-circle" /> -->
+            <h1 class="title"></h1>
+            <h2 class="subtitle"></h2>
+          </div>
+        </div>
+      </section>
+      <section id="main-section" class="section">
+        <div id="main-content" class="container main-content content">
+          {{ CONTENT }}
+        </div>
+      </section>
+    </div>
+
+    <footer id="footer-section" class="">
+      <div id="footer-container" class="">
+        <div id="footer">
+          <aside>
+            <div class="columns">
+              <div class="column">
+              </div>
+              <div class="column">
+              </div>
+              <div class="column">
+              </div>
+              <div class="column">
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </footer>
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <div id="copyright">&copy; 2018 Matt Petty</div>
   </body>
 </html>

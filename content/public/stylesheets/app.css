@@ -1,0 +1,301 @@
+@import url('https://fonts.googleapis.com/css?family=Arimo|Play|Source+Code+Pro');
+
+body,html {
+  background: rgb(19, 19, 19);
+  color: rgb(217, 217, 217);
+  padding: 0;
+  margin: 0;
+  font-family: "Arimo";
+  margin-bottom: 10vh;
+}
+
+section {
+  padding: 0;
+  margin: 0;
+}
+
+dt {
+  font-weight: bold;
+}
+
+code {
+  color: rgb(32, 44, 62);
+  font-family: Source Code Pro;
+}
+
+q {
+  quotes: "“" "”" "‘" "’";
+}
+
+q:before {
+    content: open-quote;
+}
+
+q:after {
+    content: close-quote;
+}
+
+pre.highlight {
+  padding: 1vw;
+  word-wrap: normal;
+  code {
+    white-space: pre;
+  }
+}
+
+.content blockquote {
+  background-color: whitesmoke;
+  border-left: 5px solid #dbdbdb;
+  padding: 1.25em 1.5em;
+}
+
+.content q {
+  background-color: whitesmoke;
+  border-left: 5px solid #dbdbdb;
+  padding: 0.25em 0.5em;
+}
+
+/* .background-hero {
+  background: url(/images/carpet.jpg) -600px -400px no-repeat;
+  background-size: 3000px;
+  position: fixed;
+  width: 100vw;
+  height: 80vh;
+} */
+
+//// bug
+// .background-hero {
+//   background: url(/images/bug.jpg) -1200px -500px no-repeat;
+//   background-size: 3000px;
+//   position: fixed;
+//   width: 100vw;
+//   height: 80vh;
+// }
+
+.background-hero {
+  background: url(/images/carpet.jpg) -700px -600px no-repeat;
+  background-size: 3000px;
+  position: fixed;
+  width: 100vw;
+  height: 80vh;
+}
+
+#main-section {
+  margin: 0 !important;
+  width: 100vw;
+  margin-bottom: 5vh !important;
+}
+
+#main-content {
+  width: auto;
+  position: sticky;
+  border-radius: 10px;
+  top: 8vh;
+  min-height: 70vh;
+  background: rgb(232, 232, 232);
+  color: rgb(59, 59, 59);
+  // width: 80vw;
+  padding: 3vh 3vw;
+  // margin-left: 0 !important;
+}
+
+#main-content .articles {
+  margin-top: -2vh;
+  padding-top: 0;
+}
+
+footer {
+  display: none;
+  border-top: 10px solid rgba(255, 246, 251, 0.8);
+  background: rgb(66, 60, 63);
+  padding-top: 20px;
+  padding-right: 30px;
+  padding-left: 30px;
+  padding-bottom: 80px;
+  position: relative;
+  top: 50vh;
+  width: 100vw;
+}
+
+footer #footer {
+  clear: both;
+  top: 90vh;
+  position: sticky;
+  bottom: 0;
+}
+
+div,p {
+  margin-bottom: 9px;
+}
+
+ol,ul li p {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: rgb(158, 14, 70);
+}
+
+a:hover {
+  color: rgb(223, 0, 101);
+  text-decoration: underline;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ul,ol {
+  list-style-position: inside;
+  padding-left: 5px;
+}
+
+ul,ol li {
+  margin-left: 1vw;
+}
+
+ol {
+  padding-left: 4px;
+}
+
+p {
+  padding: 1vh 0;
+  // text-indent: 1vw;
+}
+
+.hero {
+  width: 100vw;
+}
+
+.main-content img {
+  width: 100%;
+}
+
+.article {
+  border-bottom: 2px solid rgba(196, 196, 196, 0.5);
+  padding-bottom: 30px;
+}
+
+#main-content h1.super-header {
+  font-size: 3rem !important;
+}
+
+.article h1 {
+  font-size: 1.5em !important;
+  font-weight: bold;
+}
+.article h2,h3,h4,h5,h6 {
+  font-size: 1.2em !important;
+}
+
+.article h2.article-header {
+  font-size: 2em !important;
+}
+
+.article-header-date {
+  float: right;
+  font-size: 1.1em;
+  font-style: italic;
+  opacity: 0.5;
+}
+
+.hero .header-circle {
+  border-radius: 50%;
+  height: 46vh;
+  margin: 0 auto !important;
+  padding: 0;
+  display: block;
+  box-shadow: rgba(0, 0, 0, 0.81) 0px 2px 35px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-weight: bold;
+  font-family: Play;
+}
+
+h1 {
+  font-size: 2.3em !important;
+}
+
+h2 {
+  font-size: 1.7em;
+}
+
+h3 {
+  font-size: 1.5em;
+}
+
+h4 {
+  font-size: 1.2em;
+}
+
+h5 {
+  font-size: 1.2em;
+}
+
+h6 {
+  font-size: inherit;
+}
+
+#copyright {
+  position: fixed;
+  width: 100vw;
+  bottom: 0px;
+  padding-right: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin: 0;
+  font-size: 0.6em;
+  text-align: right;
+  text-shadow: black 1px 1px 1px;
+  // background: rgba(158, 158, 158, 0.18);
+  color: rgba(249, 249, 249, 0.64);
+  opacity: 0.5;
+}
+
+#copyright a {
+  color: white;
+}
+
+#corner-icon {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  z-index: 10;
+  font-size: 32px;
+  text-align: center;
+}
+
+#corner-icon a {
+  display: block;
+}
+
+#corner-icon a * {
+  color: white;
+  opacity: 0.8;
+  transition: 0.5s ease;
+  text-shadow: 2px 2px 2px black !important;
+}
+
+#corner-icon a:hover * {
+  opacity: 1;
+  color: rgb(255, 233, 32);
+  text-shadow: 2px 2px 12px black !important;
+}
+
+#kzm {
+  position: fixed;
+  top: 15px;
+  left: 20px;
+  width: 44px;
+  z-index: 10;
+  font-size: 32px;
+  text-align: center;
+  transition: 0.5s ease;
+  opacity: 0.5;
+}
+
+#kzm:hover {
+  opacity: 1;
+}
