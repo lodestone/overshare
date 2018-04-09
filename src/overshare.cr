@@ -1,6 +1,40 @@
 require "./overshare/*"
 
 module Overshare
+  CODE_LANGS = %w[
+    applescript
+    bib
+    c
+    coffee
+    cpp
+    cr
+    css
+    csv
+    cxx
+    diff
+    erb
+    feature
+    haml
+    java
+    js
+    json
+    py
+    r
+    rb
+    sass
+    scss
+    sh
+    sql
+    tex
+    toml
+    ts
+    txt
+    vim
+    vue
+    xml
+    yaml
+    yml
+  ]
 end
 
 case ARGV[0]?
