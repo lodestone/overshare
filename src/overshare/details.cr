@@ -151,6 +151,7 @@ module Overshare
 
     def render_html
       return Remarkdown.to_html File.read(endpoint_path) if endpoint_path =~ /\.md$/
+      return Remarkdown.to_html "```\n#{File.read(endpoint_path)}\n```" if Overshare::CODE_LANGS.includes?(endpoint_path.split(".").last)
       return `asciidoctor -s -o - #{endpoint_path}` if endpoint_path =~ /\.adoc$/
     end
 
