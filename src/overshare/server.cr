@@ -21,6 +21,14 @@ module ETagGuardian
   end
 end
 
+class CacheControlHandler < Kemal::Handler
+  def call(context)
+    puts "in here!"
+    context.response.headers["Cache-Control"] = "public, max-age=60480"
+    call_next context
+  end
+end
+add_handler CacheControlHandler.new
 
 class IndexHandler < Kemal::Handler
   include ETagGuardian
@@ -52,6 +60,7 @@ class IndexHandler < Kemal::Handler
 end
 add_handler IndexHandler.new
 
+
 error 404 do
   "TODO: Make a 404 page."
 end
@@ -63,7 +72,7 @@ end
 
 include ETagGuardian
 
-public_folder "content/public"
+# public_folder "content/public"
 serve_static false
 
 Kemal.config.host_binding = Overshare::Settings["host"].as_s
@@ -71,6 +80,7 @@ Kemal.config.port = Overshare::Settings["port"].as_i
 
 before_all do |env|
   env.response.content_type = "application/json"
+  # env.response.headers["Cache-Control"] = "public, max-age=60480"
 end
 
 
