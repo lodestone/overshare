@@ -23,7 +23,6 @@ end
 
 class CacheControlHandler < Kemal::Handler
   def call(context)
-    puts "in here!"
     context.response.headers["Cache-Control"] = "public, max-age=60480"
     call_next context
   end
