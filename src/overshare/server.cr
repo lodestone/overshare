@@ -17,9 +17,10 @@ module ETagGuardian
       context.response.status_code = 304 # not modified
       context.response.close
     end
-    return etag_match
+    etag_match
   end
 end
+include ETagGuardian
 
 class CacheControlHandler < Kemal::Handler
   def call(context)
@@ -41,6 +42,7 @@ class IndexHandler < Kemal::Handler
     public_dir = Overshare::Settings["static_dir"].as_s
     path = File.join(public_dir, context.request.path)
 
+    p path
     # No file match under the public directory, carry on...
     return call_next(context) if !File.exists?(path)
 
@@ -59,7 +61,6 @@ class IndexHandler < Kemal::Handler
 end
 add_handler IndexHandler.new
 
-
 error 404 do
   "TODO: Make a 404 page."
 end
@@ -68,10 +69,6 @@ error 500 do
   "TODO: Make a 500 page"
 end
 
-
-include ETagGuardian
-
-# public_folder "content/public"
 serve_static false
 
 Kemal.config.host_binding = Overshare::Settings["host"].as_s
@@ -79,9 +76,7 @@ Kemal.config.port = Overshare::Settings["port"].as_i
 
 before_all do |env|
   env.response.content_type = "application/json"
-  # env.response.headers["Cache-Control"] = "public, max-age=60480"
 end
-
 
 def four_oh_four_message
   %Q[{"message": "Error 404: It's so dark in here"}]
@@ -111,25 +106,28 @@ def authorized(username, password)
   username_ok && password_ok
 end
 
-def check_authorization(env)
+def check_auth(env)
   authorization = env.request.headers["Authorization"]?
   username, password = Base64.decode_string(authorization["Basic".size + 1..-1]).split(":") if authorization
-  reject_request(env) if !authorized(username, password)
+  authorized(username, password)
 end
 
-def reject_request(env)
-  env.response.status_code = 401
-  env.response.print "Forbidden"
-  env.response.close
+def check_key(env)
+  env.params.query["key"]? == Overshare::Settings["api_key"]
+end
+
+def access_granted?(env)
+  access_okay = check_key(env) || check_auth(env)
+  env.response.respond_with_error "Forbidden", 401 unless access_okay
+  access_okay
 end
 
 post "/#{Overshare::Settings["symbol"]}" do |env|
-  check_authorization(env)
+  next unless access_granted?(env)
   if point = extract_point_from_params(env)
     detail = Overshare::Detail.make(point)
     url = detail.uri
     {"message" => "Created", "url" => url, Overshare::Settings["url_key"] => url}.to_json
-    # {"message" => "Created", Overshare::Settings["url_key"] => detail.uri}.to_json
   else
     {"message" => "ERROR: must include <endpoint> parameter"}.to_json
   end
