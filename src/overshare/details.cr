@@ -70,7 +70,6 @@ module Overshare
       ensure_path
       uri = URI.parse(@endpoint)
 
-      # TODO: Handle code snippets here
       if uri.scheme == nil || uri.scheme == "file"
         raise "File not found" if !File.exists?(@endpoint)
         FileUtils.cp @endpoint, @endpoint_final_destination
