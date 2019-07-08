@@ -93,7 +93,14 @@ def handle_uploaded_tmpfile(point)
 end
 
 def extract_point_from_params(env)
-  point = env.params.query["endpoint"]? || env.params.body["uri"]? || env.params.body["url"]? || env.params.body["endpoint"]? || env.params.files["file"]? || env.params.files["endpoint"]?
+  if env.params.query
+    point = env.params.query["uri"]? || env.params.query["url"]? || env.params.query["endpoint"]?
+  end
+
+  if !point && env.params.body
+    point = env.params.body["uri"]? || env.params.body["url"]? || env.params.body["endpoint"]?
+  end
+
   point = handle_uploaded_tmpfile(point) if point.is_a? Kemal::FileUpload
   point
 end
