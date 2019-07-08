@@ -8,16 +8,17 @@ require "./settings"
 
 module ETagGuardian
   def etag_guard(context : HTTP::Server::Context, file_path : String)
-    etag = %{W/"#{File.lstat(file_path).mtime.epoch.to_s}"}
-    context.response.headers["ETag"] = etag
-    etag_match = context.request.headers["If-None-Match"]? && context.request.headers["If-None-Match"] == etag
-    if etag_match
-      context.response.headers.delete "Content-Type"
-      context.response.content_length = 0
-      context.response.status_code = 304 # not modified
-      context.response.close
-    end
-    return etag_match
+    p File.info?(file_path)
+    # etag = %{W/"#{File.info?(file_path).modification_time.epoch.to_s}"}
+    # context.response.headers["ETag"] = etag
+    # etag_match = context.request.headers["If-None-Match"]? && context.request.headers["If-None-Match"] == etag
+    # if etag_match
+    #   context.response.headers.delete "Content-Type"
+    #   context.response.content_length = 0
+    #   context.response.status_code = 304 # not modified
+    #   context.response.close
+    # end
+    # return etag_match
   end
 end
 
@@ -88,12 +89,12 @@ def four_oh_four_message
 end
 
 def handle_uploaded_tmpfile(point)
-  FileUtils.mv point.tmpfile.path, new_point = "/tmp/#{point.filename}"
+  FileUtils.mv point.tempfile.path, new_point = "/tmp/#{point.filename}"
   new_point
 end
 
 def extract_point_from_params(env)
-  point = env.params.body["uri"]? || env.params.body["url"]? || env.params.body["endpoint"]? || env.params.files["file"]? || env.params.files["endpoint"]?
+  point = env.params.query["endpoint"]? || env.params.body["uri"]? || env.params.body["url"]? || env.params.body["endpoint"]? || env.params.files["file"]? || env.params.files["endpoint"]?
   point = handle_uploaded_tmpfile(point) if point.is_a? Kemal::FileUpload
   point
 end
@@ -120,7 +121,9 @@ post "/#{Overshare::Settings["symbol"]}" do |env|
   check_authorization(env)
   if point = extract_point_from_params(env)
     detail = Overshare::Detail.make(point)
-    {"message" => "Created", "url" => detail.uri}.to_json
+    url = detail.uri
+    {"message" => "Created", "url" => url, Overshare::Settings["url_key"] => url}.to_json
+    # {"message" => "Created", Overshare::Settings["url_key"] => detail.uri}.to_json
   else
     {"message" => "ERROR: must include <endpoint> parameter"}.to_json
   end
@@ -157,7 +160,7 @@ def go_detail(env)
     log "#{Time.now} Serving:::: #{Overshare::Settings["details_dir"]}/#{sid} FROM //#{env.request.host_with_port}#{env.request.path}"
     ext = File.extname("#{sid}").gsub(".", "")
     path = "#{Overshare::Settings["details_dir"]}/#{sid}"
-    mime_type = Mime.from_ext(ext)
+    mime_type = MIME.from_extension(ext)
     env.response.content_type = mime_type.to_s
     return if etag_guard(env, path)
     return send_file env, path, mime_type
