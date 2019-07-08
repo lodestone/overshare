@@ -7,6 +7,7 @@ config/settings.yml
 /overshare
 overshare.o
 overshare.dwarf
+content
 
 # Libraries don't need dependency lock
 # Dependencies will be locked in application that uses them
