@@ -8,17 +8,16 @@ require "./settings"
 
 module ETagGuardian
   def etag_guard(context : HTTP::Server::Context, file_path : String)
-    p File.info?(file_path)
-    # etag = %{W/"#{File.info?(file_path).modification_time.epoch.to_s}"}
-    # context.response.headers["ETag"] = etag
-    # etag_match = context.request.headers["If-None-Match"]? && context.request.headers["If-None-Match"] == etag
-    # if etag_match
-    #   context.response.headers.delete "Content-Type"
-    #   context.response.content_length = 0
-    #   context.response.status_code = 304 # not modified
-    #   context.response.close
-    # end
-    # return etag_match
+    etag = %{W/"#{File.info(file_path).modification_time.to_unix.to_s}"}
+    context.response.headers["ETag"] = etag
+    etag_match = context.request.headers["If-None-Match"]? && context.request.headers["If-None-Match"] == etag
+    if etag_match
+      context.response.headers.delete "Content-Type"
+      context.response.content_length = 0
+      context.response.status_code = 304 # not modified
+      context.response.close
+    end
+    return etag_match
   end
 end
 
